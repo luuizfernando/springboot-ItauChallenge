@@ -1,5 +1,7 @@
 package com.projects.itau_challenge.services;
 
+import java.time.Instant;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,12 +16,20 @@ public class TransactionService {
 
     public Transaction createTransaction(Transaction t) {
         validateTransactionValue(t);
+        validateTransactionDate(t);
         return repository.save(t);
     }
 
     private void validateTransactionValue(Transaction t) {
         if (t.getValor() < 0) {
             throw new IllegalArgumentException("Transaction value cannot be negative.");
+        }
+    }
+
+    private void validateTransactionDate(Transaction t) {
+        Instant now = Instant.now();
+        if (t.getDataHora().isAfter(now)) {
+            throw new IllegalArgumentException("Transaction date cannot be in the future.");
         }
     }
 }
