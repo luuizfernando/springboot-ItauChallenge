@@ -13,6 +13,13 @@ public class TransactionService {
     TransactionRepository repository;
 
     public Transaction createTransaction(Transaction t) {
+        validateTransactionValue(t);
         return repository.save(t);
+    }
+
+    private void validateTransactionValue(Transaction t) {
+        if (t.getValor() < 0) {
+            throw new IllegalArgumentException("Transaction value cannot be negative.");
+        }
     }
 }
