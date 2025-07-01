@@ -20,6 +20,10 @@ public class TransactionService {
         return repository.save(t);
     }
 
+    public void deleteAllTransactions() {
+        repository.deleteAll();
+    }
+
     private void validateTransactionValue(Transaction t) {
         if (t.getValor() < 0) {
             throw new IllegalArgumentException("Transaction value cannot be negative.");
