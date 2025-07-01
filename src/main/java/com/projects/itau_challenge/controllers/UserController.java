@@ -20,4 +20,5 @@ public class UserController {
     public User registerUser(@RequestBody User u) {
         return service.registerUser(u);
     }
+    
 }

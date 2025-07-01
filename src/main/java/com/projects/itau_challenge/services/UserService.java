@@ -15,4 +15,5 @@ public class UserService {
     public User registerUser(User u) {
         return repository.save(u);
     }
+    
 }

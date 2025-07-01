@@ -23,6 +23,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name="tb_transaction")
 public class Transaction {
+
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
@@ -36,4 +37,5 @@ public class Transaction {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+    
 }

@@ -5,12 +5,14 @@ import java.net.URI;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.projects.itau_challenge.domain.transaction.Transaction;
+import com.projects.itau_challenge.domain.transaction.TransactionStatisticsDTO;
 import com.projects.itau_challenge.services.TransactionService;
 
 @RestController
@@ -30,5 +32,11 @@ public class TransactionController {
     public ResponseEntity<Void> deleteAllTransactions() {
         service.deleteAllTransactions();
         return ResponseEntity.ok().build();
+    }
+    
+    @GetMapping(value = "estatistica")
+    public ResponseEntity<TransactionStatisticsDTO> getTransactionStatistics() {
+        TransactionStatisticsDTO stats = service.getTransactionStatistics(service.findAll());
+        return ResponseEntity.ok().body(stats);
     }
 }
