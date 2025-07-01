@@ -29,6 +29,6 @@ public class TransactionController {
     @DeleteMapping(value = "transacao")
     public ResponseEntity<Void> deleteAllTransactions() {
         service.deleteAllTransactions();
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok().build();
     }
 }
