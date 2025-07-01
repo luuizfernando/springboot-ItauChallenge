@@ -24,6 +24,11 @@ import lombok.NoArgsConstructor;
 @Table(name="tb_transaction")
 public class Transaction {
 
+    public Transaction(Double valor, Instant dataHora) {
+        this.valor = valor;
+        this.dataHora = dataHora;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
