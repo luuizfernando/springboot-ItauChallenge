@@ -60,4 +60,25 @@ public class TransactionServiceTest {
         assertThrows(NullPointerException.class, () -> service.createTransaction(transaction));
         verify(repository, never()).save(transaction);
     }
+
+
+    @Test
+    @DisplayName("Should not create transaction when valor and dataHora are null")
+    public void createTransactionCase4() {
+        Transaction transaction = new Transaction(null, null);
+        assertThrows(NullPointerException.class, () -> service.createTransaction(transaction));
+        verify(repository, never()).save(transaction);
+    }
+
+    @Test
+    @DisplayName("Should not create transaction if valor is negative")
+    public void createTransactionCase5() {
+        Double valor = -100.0;
+        Instant dataHora = Instant.now();
+        Transaction transaction = new Transaction(valor, dataHora);
+
+        assertThrows(IllegalArgumentException.class, () -> service.createTransaction(transaction));
+        verify(repository, never()).save(transaction);
+        
+    }
 }
