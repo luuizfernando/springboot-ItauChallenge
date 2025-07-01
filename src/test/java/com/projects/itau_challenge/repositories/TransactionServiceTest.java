@@ -79,6 +79,17 @@ public class TransactionServiceTest {
 
         assertThrows(IllegalArgumentException.class, () -> service.createTransaction(transaction));
         verify(repository, never()).save(transaction);
-        
+
+    }
+
+    @Test
+    @DisplayName("Should not create transaction if dataHora is in the future")
+    public void createTransactionCase6() {
+        Double valor = 100.0;
+        Instant dataHora = Instant.now().plusSeconds(1);
+        Transaction transaction = new Transaction(valor, dataHora);
+
+        assertThrows(IllegalArgumentException.class, () -> service.createTransaction(transaction));
+        verify(repository, never()).save(transaction);
     }
 }
