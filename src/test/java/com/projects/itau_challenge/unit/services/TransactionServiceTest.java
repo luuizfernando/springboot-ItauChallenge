@@ -1,4 +1,4 @@
-package com.projects.itau_challenge.repositories;
+package com.projects.itau_challenge.unit.services;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -14,6 +14,7 @@ import static org.mockito.Mockito.never;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import com.projects.itau_challenge.domain.transaction.Transaction;
+import com.projects.itau_challenge.repositories.TransactionRepository;
 import com.projects.itau_challenge.services.TransactionService;
 
 @ExtendWith(MockitoExtension.class)
@@ -25,6 +26,7 @@ public class TransactionServiceTest {
     @InjectMocks
     private TransactionService service;
 
+    // Unit Tests
     @Test
     @DisplayName("Should create transaction when valor and dataHora are not null")
     public void createTransactionCase1() {
@@ -92,4 +94,5 @@ public class TransactionServiceTest {
         assertThrows(IllegalArgumentException.class, () -> service.createTransaction(transaction));
         verify(repository, never()).save(transaction);
     }
+
 }
