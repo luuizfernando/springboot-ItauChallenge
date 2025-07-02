@@ -1,6 +1,8 @@
 services:
   app:
-    image: itau-challenge
+    build: .
     container_name: itau-challenge
     ports:
       - 8081:8080
+    environment:
+      - SPRING_PROFILES_ACTIVE=dev
