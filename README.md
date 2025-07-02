@@ -52,7 +52,7 @@ The `--build` command ensures that the Docker image will be built the first time
 
 ## 📖 Accessing the Application
 
-- **Swagger UI:** `http://localhost:8080/swagger-ui.html`
+- **Swagger UI:** `http://localhost:8081/swagger-ui.html`
 
 ---
 
