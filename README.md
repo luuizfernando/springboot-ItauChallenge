@@ -19,6 +19,7 @@ This code is a resolution of the challenge proposed by Itaú for a Backend vacan
 - **Swagger**
 - **JUnit**
 - **Mockito**
+- **MockMvc**
 - **Docker**
 
 ---
