@@ -1,0 +1,6 @@
+services:
+  app:
+    image: itau-challenge
+    container_name: itau-challenge
+    ports:
+      - 8081:8080
