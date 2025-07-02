@@ -7,7 +7,7 @@ import lombok.Getter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
-public class TransactionStatisticsDTO {
+public class TransactionStatistics {
 
     private Long count;
     private Double sum;

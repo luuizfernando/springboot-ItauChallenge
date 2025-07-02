@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.projects.itau_challenge.domain.transaction.Transaction;
-import com.projects.itau_challenge.domain.transaction.TransactionStatisticsDTO;
+import com.projects.itau_challenge.domain.transaction.TransactionStatistics;
 import com.projects.itau_challenge.repositories.TransactionRepository;
 
 @Service
@@ -32,20 +32,20 @@ public class TransactionService {
         repository.deleteAll();
     }
 
-    public TransactionStatisticsDTO getTransactionStatistics(List<Transaction> transactions) {
+    public TransactionStatistics getTransactionStatistics(List<Transaction> transactions) {
         Instant last60Seconds = Instant.now().minusSeconds(60);
         List<Transaction> transactionsInLast60Seconds = transactions.stream()
             .filter(t -> t.getDataHora().isAfter(last60Seconds))
             .collect(Collectors.toList());
 
         if (transactionsInLast60Seconds.isEmpty()) {
-            return new TransactionStatisticsDTO(0L, 0.0, 0.0, 0.0, 0.0);
+            return new TransactionStatistics(0L, 0.0, 0.0, 0.0, 0.0);
         } else {
             DoubleSummaryStatistics stats = transactionsInLast60Seconds.stream()
                 .mapToDouble(Transaction::getValor)
                 .summaryStatistics();
 
-            return new TransactionStatisticsDTO(
+            return new TransactionStatistics(
                 stats.getCount(),
                 stats.getSum(),
                 stats.getAverage(),
