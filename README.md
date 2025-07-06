@@ -1,4 +1,4 @@
-# Springboot - ItauChallenge
+# Springboot - Itau Challenge
 
 This code is a resolution of the challenge proposed by Itaú for a Backend vacancy built with **Springboot**.
 
@@ -7,7 +7,7 @@ This code is a resolution of the challenge proposed by Itaú for a Backend vacan
 ## 🌐 Endpoints
 - **POST** `/transacao`: Create a transaction.
 - **DELETE** `/transacao`: Delete all transactions.
-- **GET** `/estatistica`: Get the statistics of all transactions.
+- **GET** `/estatistica`: Get the statistics of all transactions in the last 60 seconds.
 
 ---
 
