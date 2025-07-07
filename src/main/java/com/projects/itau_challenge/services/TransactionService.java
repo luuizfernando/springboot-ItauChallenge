@@ -2,15 +2,27 @@ package com.projects.itau_challenge.services;
 
 import java.time.Instant;
 import java.util.DoubleSummaryStatistics;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.RestTemplate;
 
 import com.projects.itau_challenge.domain.transaction.Transaction;
 import com.projects.itau_challenge.domain.transaction.TransactionStatistics;
 import com.projects.itau_challenge.repositories.TransactionRepository;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Service
 public class TransactionService {
@@ -25,6 +37,11 @@ public class TransactionService {
     public Transaction createTransaction(Transaction t) {
         validateTransactionValue(t);
         validateTransactionDate(t);
+        try {
+            verifyFraud(t);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException("Error processing JSON when checking fraud.", e);
+        }
         return repository.save(t);
     }
 
@@ -68,4 +85,44 @@ public class TransactionService {
         }
     }
 
+    private String verifyFraud(Transaction t) throws JsonProcessingException {
+        String url = "http://localhost:8000/predict/"; 
+
+        RestTemplate restTemplate = new RestTemplate();
+
+        Map<String, Object> body = new HashMap<>();
+        body.put("valor", t.getValor());
+        
+        body.put("dataHora", t.getDataHora().toString());
+
+        ObjectMapper mapper = new ObjectMapper();
+        String json = mapper.writeValueAsString(body);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        HttpEntity<String> request = new HttpEntity<>(json, headers);
+
+        try {
+            ResponseEntity<Map<String, String>> response = restTemplate.exchange(
+                url,
+                HttpMethod.POST,
+                request,
+                new ParameterizedTypeReference<Map<String, String>>() {}
+            );
+            
+            if (response.getBody() != null && response.getBody().containsKey("Result")) {
+                return response.getBody().get("Result");
+            } else {
+                System.out.println("Fraud template response does not contain 'Result' or is empty.");
+                return "indeterminate";
+            }
+        } catch (HttpClientErrorException e) {
+            System.out.println("HTTP error when querying fraud model (" + e.getStatusCode() + "): " + e.getResponseBodyAsString());
+            return "http_error";
+        } catch (Exception e) {
+            System.out.println("Unexpected error while querying fraud model: " + e.getMessage());
+            return "general_error";
+        }
+    }
 }
