@@ -21,6 +21,7 @@ import org.springframework.web.client.RestTemplate;
 import com.projects.itau_challenge.domain.transaction.Transaction;
 import com.projects.itau_challenge.domain.transaction.TransactionStatistics;
 import com.projects.itau_challenge.repositories.TransactionRepository;
+import com.projects.itau_challenge.services.exceptions.FraudDetectedException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -37,11 +38,19 @@ public class TransactionService {
     public Transaction createTransaction(Transaction t) {
         validateTransactionValue(t);
         validateTransactionDate(t);
+        
         try {
-            verifyFraud(t);
+            String fraudResult = verifyFraud(t);
+            System.out.println("Transaction classified as: " + fraudResult.toUpperCase());
+
+            if ("fraud".equalsIgnoreCase(fraudResult)) {
+                throw new FraudDetectedException("Suspected fraud transaction detected and blocked.");
+            }
+
         } catch (JsonProcessingException e) {
             throw new RuntimeException("Error processing JSON when checking fraud.", e);
         }
+
         return repository.save(t);
     }
 
